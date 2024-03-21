@@ -22,11 +22,12 @@ def create_or_update_organization_secret_github(organization: str, secret_name: 
     The token must have the following permission set: organization_secrets:write
     """
     encrypted_secret = os.getenv('ENCRYPTED_SECRET')
+    repo_name = os.getenv('REPOSITORY_NAME')
     if not encrypted_secret:
         print("ENCRYPTED_SECRET environment variable is not set or is empty.")
     print(f'encrypted sec is: {encrypted_secret}')
     ist_now_formatted = current_ist_time()
-    github_org_secret_endpoint = f"https://api.github.com/orgs/{organization}/actions/secrets/{secret_name}"
+    github_repo_secret_endpoint = f"https://api.github.com/repos/{organization}/{repo_name}/actions/secrets/{secret_name}"
 
     headers = {
         "Accept": "application/vnd.github+json",
@@ -36,13 +37,13 @@ def create_or_update_organization_secret_github(organization: str, secret_name: 
     data = {
         "encrypted_value": encrypted_secret,
         "visibility": "all",
-        "key_id": os.getenv('PUBLIC_KEY_ID')
+        "key_id": os.getenv('REPOSITORY_PUBLIC_KEY_ID')
     }
-    response = requests.put(github_org_secret_endpoint, headers=headers, json=data)
-    if response.status_code == '201':
-        print(f"Secret {secret_name} created {organization} at {ist_now_formatted} ")
+    response = requests.put(github_repo_secret_endpoint, headers=headers, json=data)
+    if response.status_code == 201:
+        print(f"Secret {secret_name} created {repo_name} at {ist_now_formatted} ")
     else:
-        print(f"Secret {secret_name} updated on {organization} at {ist_now_formatted} ")
+        print(f"Secret {secret_name} updated on {repo_name} at {ist_now_formatted} ")
 
 
 def main():
