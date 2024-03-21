@@ -40,9 +40,9 @@ def create_or_update_organization_secret_github(organization: str, secret_name: 
     }
     response = requests.put(github_org_secret_endpoint, headers=headers, json=data)
     if response.status_code == '201':
-        print(f"Secret {secret_name} created {organization} at {ist_now_formatted}")
+        print(f"Secret {secret_name} created {organization} at {ist_now_formatted} ")
     else:
-        print(f"Secret {secret_name} updated on {organization} at {ist_now_formatted}")
+        print(f"Secret {secret_name} updated on {organization} at {ist_now_formatted} ")
 
 
 def main():

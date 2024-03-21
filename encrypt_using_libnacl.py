@@ -17,7 +17,7 @@ def encrypt(public_key: str, secret_value: str) -> str:
     return b64encode(encrypted).decode("utf-8")
 
 def main():
-    repo_public_key = os.environ.get("PUBLIC_KEY")
+    repo_public_key = os.environ.get("REPOSITORY_PUBLIC_KEY")
     secret_value = os.environ.get("SECRET_VALUE")
     # public_key = "<public key here for local testing>"
     # secret_value = "Krishnadhas"
