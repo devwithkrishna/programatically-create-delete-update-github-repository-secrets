@@ -14,36 +14,27 @@ def current_ist_time():
     return ist_now_formatted
 
 
-def create_or_update_repository_secret_github(organization: str, secret_name: str):
+def delete_repository_secret_github(organization: str, repository_name:str, secret_name: str):
     """
     Create or update org level secret in GitHub
     Ref https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#create-or-update-an-organization-secret
 
     The token must have the following permission set: organization_secrets:write
     """
-    encrypted_secret = os.getenv('ENCRYPTED_SECRET')
-    repo_name = os.getenv('REPOSITORY_NAME')
-    if not encrypted_secret:
-        print("ENCRYPTED_SECRET environment variable is not set or is empty.")
-    print(f'encrypted sec is: {encrypted_secret}')
     ist_now_formatted = current_ist_time()
-    github_repo_secret_endpoint = f"https://api.github.com/repos/{organization}/{repo_name}/actions/secrets/{secret_name}"
+    github_repo_secret_endpoint = f"https://api.github.com/repos/{organization}/{repository_name}/actions/secrets/{secret_name}"
 
     headers = {
         "Accept": "application/vnd.github+json",
         "Authorization": f"Bearer {os.getenv('GH_TOKEN')}",
         "X-GitHub-Api-Version": "2022-11-28"
     }
-    data = {
-        "encrypted_value": encrypted_secret,
-        "visibility": "all",
-        "key_id": os.getenv('REPOSITORY_PUBLIC_KEY_ID')
-    }
-    response = requests.put(github_repo_secret_endpoint, headers=headers, json=data)
-    if response.status_code == 201:
-        print(f"Secret {secret_name} created {repo_name} at {ist_now_formatted} ")
+
+    response = requests.delete(github_repo_secret_endpoint, headers=headers)
+    if response.status_code == 204:
+        print(f"Secret {secret_name} deleted from {repository_name} at {ist_now_formatted} ")
     else:
-        print(f"Secret {secret_name} updated on {repo_name} at {ist_now_formatted} ")
+        print(f"Something happened while deleting {secret_name} from {repository_name} at {ist_now_formatted} ")
 
 
 def main():
@@ -51,9 +42,10 @@ def main():
 
     organization = os.getenv('organization')
     secret_name = os.getenv('secret_name')
+    repository_name = os.getenv('repository_name')
 
     # Function call
-    create_or_update_repository_secret_github(organization, secret_name)
+    delete_repository_secret_github(organization,repository_name, secret_name)
 
 if __name__ == "__main__":
     main()
