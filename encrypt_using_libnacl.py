@@ -17,17 +17,17 @@ def encrypt(public_key: str, secret_value: str) -> str:
     return b64encode(encrypted).decode("utf-8")
 
 def main():
-    public_key = os.environ.get("PUBLIC_KEY")
+    repo_public_key = os.environ.get("PUBLIC_KEY")
     secret_value = os.environ.get("SECRET_VALUE")
     # public_key = "<public key here for local testing>"
     # secret_value = "Krishnadhas"
 
-    if not (public_key and secret_value):
-        print("Please set PUBLIC_KEY and SECRET_VALUE environment variables.")
+    if not (repo_public_key and secret_value):
+        print("Please set REPOSITORY_PUBLIC_KEY and SECRET_VALUE environment variables.")
         exit(1)
 
     try:
-        encrypted_secret = encrypt(public_key, secret_value)
+        encrypted_secret = encrypt(repo_public_key, secret_value)
         os.system(f'echo "ENCRYPTED_SECRET={encrypted_secret}" >> $GITHUB_ENV')
         print(f"Encrypted Secret: {encrypted_secret}")
         print(f"Encrypted secret added as a environment variable")
