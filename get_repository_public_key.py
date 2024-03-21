@@ -69,9 +69,7 @@ def get_repository_public_key_id(organization:str ,repository_name: str):
 
 def main():
     """ To test the python code """
-    # GH_TOKEN = os.environ.get("GH_TOKEN")
-    gh_token = "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"
-    os.environ['GH_TOKEN'] = gh_token
+    GH_TOKEN = os.environ.get("GH_TOKEN")
     parser = argparse.ArgumentParser(description="Get the public key of the repository in GitHub")
     parser.add_argument("--organization", required=True, type=str, help= "GitHub organization name")
     parser.add_argument("--repository_name", help= "GitHub repository name", type=str, required=True)
