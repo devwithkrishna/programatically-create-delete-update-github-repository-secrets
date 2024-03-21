@@ -83,13 +83,13 @@ def main():
         os.system(f'echo "REPOSITORY_PUBLIC_KEY={repo_public_key}" >> $GITHUB_ENV')
         print(f"Public key added as a environment variable")
         repo_public_key_id = get_repository_public_key_id(organization, repository_name)
-        os.system(f'echo "REPOSITORY_PUBLIC_KEY_ID={repo_public_key}" >> $GITHUB_ENV')
+        os.system(f'echo "REPOSITORY_PUBLIC_KEY_ID={repo_public_key_id}" >> $GITHUB_ENV')
         print(f"Public key id added as a environment variable")
 
 
         # return encrypted_secret
     except Exception as e:
-        print(f"Error encrypting secret: {e}")
+        print(f"Error retrieving public key and public key id of {repository_name}: {e}")
         exit(1)
 
 if __name__ == "__main__":
